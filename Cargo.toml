@@ -1,0 +1,22 @@
+[package]
+name = "apple-signin"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+authors = ["Peter Todorov <me@peterprototypes.com>"]
+description = "Decodes and validates identity tokens generated via Sign in with Apple"
+repository = "https://github.com/peterprototypes/apple-signin"
+documentation = "https://docs.rs/apple-signin"
+readme = "README.md"
+keywords = ["apple", "signin", "jwt"]
+categories = ["api-bindings"]
+
+[features]
+native-tls = ["reqwest/native-tls"]
+rustls-tls = ["reqwest/rustls-tls"]
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_repr = "0.1"
+jsonwebtoken = { version = "9.2", default-features = false }
+reqwest = { version = "0.11", default-features = false, features = ["json"] }
