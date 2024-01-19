@@ -1,6 +1,6 @@
 //! # Apple Sign-In
 //!
-//! This crate provides an API to verify and decode Apple's identity JWT The token is typically generated via
+//! This crate provides an API to verify and decode Apple's identity JWT. The token is typically generated via
 //! [ASAuthorizationController](https://developer.apple.com/documentation/authenticationservices/asauthorizationcontroller)
 //! from the [AuthenticationServices](https://developer.apple.com/documentation/authenticationservices) iOS framework.
 //!

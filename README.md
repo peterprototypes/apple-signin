@@ -1,8 +1,10 @@
-Apple JWT Validation for Rust
+Apple Sign In for Rust
 =======================
 
 [![Crates.io](https://img.shields.io/crates/v/apple-signin?color=4d76ae)](https://crates.io/crates/apple-signin)
 [![Docs](https://docs.rs/apple-signin/badge.svg)](https://docs.rs/apple-signin)
+
+This crate provides an API to verify and decode Apple's identity JWT, typically generated via the `AuthenticationServices` iOS Framework.
 
 ## Usage
 
