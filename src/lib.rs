@@ -116,6 +116,7 @@ pub struct JwtPayload {
     pub user_id: String,
 }
 
+#[derive(Clone, Debug)]
 pub struct AppleJwtClient {
     keyset_cache: Option<JwkSet>,
     validation: Validation,
