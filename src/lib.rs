@@ -114,6 +114,15 @@ pub struct JwtPayload {
     /// - Typically stores alongside the user’s primary key in a database
     #[serde(rename = "sub")]
     pub user_id: String,
+
+    /// The user's name, if requested.
+    pub name: Option<AppleName>,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct AppleName {
+    pub first_name: Option<String>,
+    pub last_name: Option<String>,
 }
 
 #[derive(Clone, Debug)]

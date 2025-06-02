@@ -16,7 +16,7 @@ native-tls = ["reqwest/native-tls"]
 rustls-tls = ["reqwest/rustls-tls"]
 
 [dependencies]
-serde = { version = "1", features = ["derive"] }
-serde_repr = "0.1"
-jsonwebtoken = { version = "9.2", default-features = false }
-reqwest = { version = "0.11", default-features = false, features = ["json"] }
+serde = { version = "1.0.219", features = ["derive"] }
+serde_repr = "0.1.20"
+jsonwebtoken = { version = "9.3.1", default-features = false }
+reqwest = { version = "0.12.19", default-features = false, features = ["json"] }
