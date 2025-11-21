@@ -36,7 +36,7 @@
 //!
 //! #[tokio::main]
 //! async fn main() -> Result<()> {
-//!     let mut client = AppleJwtClient::new(&["com.example.myapp"]);
+//!     let client = AppleJwtClient::new(&["com.example.myapp"]);
 //!     let payload = client.decode("[IDENTITY TOKEN]").await?;
 //!
 //!     dbg!(payload);
@@ -53,9 +53,11 @@
 //!
 mod error;
 use std::fmt;
+use std::sync::Arc;
 
 pub use error::AppleJwtError;
 
+use async_lock::RwLock;
 use jsonwebtoken::{errors::ErrorKind, jwk::JwkSet, Algorithm, DecodingKey, Validation};
 use serde::{de::Visitor, Deserialize, Deserializer, Serialize};
 use serde_repr::{Deserialize_repr, Serialize_repr};
@@ -127,7 +129,7 @@ pub struct AppleName {
 
 #[derive(Clone, Debug)]
 pub struct AppleJwtClient {
-    keyset_cache: Option<JwkSet>,
+    keyset_cache: Arc<RwLock<Option<JwkSet>>>,
     validation: Validation,
 }
 
@@ -139,13 +141,13 @@ impl AppleJwtClient {
         validation.set_required_spec_claims(&["exp", "sub", "iss", "aud"]);
 
         Self {
-            keyset_cache: None,
+            keyset_cache: Arc::new(RwLock::new(None)),
             validation,
         }
     }
 
     /// Validate and decode Apple identity JWT
-    pub async fn decode(&mut self, identity_token: &str) -> Result<JwtPayload, AppleJwtError> {
+    pub async fn decode(&self, identity_token: &str) -> Result<JwtPayload, AppleJwtError> {
         let header = jsonwebtoken::decode_header(identity_token)?;
 
         let Some(key_id) = header.kid else {
@@ -175,7 +177,7 @@ impl AppleJwtClient {
             };
 
             if just_loaded || res.is_ok() || !is_keyset_error {
-                self.keyset_cache = Some(keyset);
+                *self.keyset_cache.write().await = Some(keyset);
 
                 break;
             }
@@ -201,8 +203,8 @@ impl AppleJwtClient {
         Ok(token.claims)
     }
 
-    async fn take_cached_keyset(&mut self) -> Result<(bool, JwkSet), AppleJwtError> {
-        if let Some(keyset) = self.keyset_cache.take() {
+    async fn take_cached_keyset(&self) -> Result<(bool, JwkSet), AppleJwtError> {
+        if let Some(keyset) = self.keyset_cache.write().await.take() {
             return Ok((false, keyset));
         }
 

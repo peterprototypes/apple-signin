@@ -26,7 +26,7 @@ use apple_signin::AppleJwtClient;
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    let mut client = AppleJwtClient::new(&["com.example.myapp"]);
+    let client = AppleJwtClient::new(&["com.example.myapp"]);
     let payload = client.decode("[IDENTITY TOKEN]").await?;
 
     dbg!(payload);
